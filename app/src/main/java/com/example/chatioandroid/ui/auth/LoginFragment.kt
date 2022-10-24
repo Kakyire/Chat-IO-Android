@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.chatioandroid.R
 import com.example.chatioandroid.databinding.FragmentLoginBinding
+import com.example.chatioandroid.extensions.navigateToNextPage
+import com.example.chatioandroid.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -15,13 +17,27 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 
- @AndroidEntryPoint
- class LoginFragment: Fragment(R.layout.fragment_login) {
+@AndroidEntryPoint
+class LoginFragment : Fragment(R.layout.fragment_login) {
 
-     private lateinit var binding:FragmentLoginBinding
+    private lateinit var binding: FragmentLoginBinding
 
-     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-         super.onViewCreated(view, savedInstanceState)
-         binding= FragmentLoginBinding.bind(view)
-     }
- }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentLoginBinding.bind(view)
+        clickListeners()
+    }
+
+
+    private fun clickListeners() = with(binding) {
+
+        btnCreateAccount.setOnClickListener {
+            navigateToNextPage(
+                LoginFragmentDirections
+                    .actionLoginFragmentToCreateAccountFragment()
+            )
+        }
+
+        btnLogin.setOnClickListener { navigateToNextPage(LoginFragmentDirections.actionLoginFragmentToChatFragment()) }
+    }
+}

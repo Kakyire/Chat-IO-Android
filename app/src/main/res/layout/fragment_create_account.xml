@@ -6,12 +6,27 @@
     android:layout_marginHorizontal="@dimen/dimen_16dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailLayout"
+        android:id="@+id/usernameLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:hint="@string/email"
+        android:hint="@string/username"
         app:layout_constraintTop_toTopOf="parent"
+        app:placeholderText="name@example.com">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_16dp"
+        android:hint="@string/email"
+        app:layout_constraintTop_toBottomOf="@id/usernameLayout"
         app:placeholderText="name@example.com">
 
         <com.google.android.material.textfield.TextInputEditText

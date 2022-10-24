@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.chatioandroid.R
 import com.example.chatioandroid.databinding.FragmentCreateAccountBinding
+import com.example.chatioandroid.extensions.navigateToNextPage
+import com.example.chatioandroid.extensions.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -14,13 +16,30 @@ import dagger.hilt.android.AndroidEntryPoint
  * https://github.com/kakyire
  */
 
- @AndroidEntryPoint
- class CreateAccountFragment: Fragment(R.layout.fragment_create_account) {
-     
-     private lateinit var binding:FragmentCreateAccountBinding
- 
-     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-         super.onViewCreated(view, savedInstanceState)
-         binding= FragmentCreateAccountBinding.bind(view)
-     }
- }
+@AndroidEntryPoint
+class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
+
+    private lateinit var binding: FragmentCreateAccountBinding
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentCreateAccountBinding.bind(view)
+        clickListeners()
+    }
+
+    private fun clickListeners() = with(binding) {
+
+        btnHaveAccount.setOnClickListener {
+            navigateToNextPage(
+                CreateAccountFragmentDirections.actionCreateAccountFragmentToLoginFragment()
+            )
+        }
+
+        btnSignUp.setOnClickListener {
+            navigateToNextPage(
+                CreateAccountFragmentDirections
+                    .actionCreateAccountFragmentToChatFragment()
+            )
+        }
+    }
+}
