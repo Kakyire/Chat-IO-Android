@@ -2,4 +2,11 @@
     <string name="app_name">Chat IO Android</string>
     <string name="send">Send</string>
     <string name="message">Message</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="login">Login</string>
+    <string name="create_account">Create Account</string>
+    <string name="signup">Sign Up</string>
+    <string name="already_have_account">Already have account?</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>

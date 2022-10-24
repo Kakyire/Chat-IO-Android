@@ -1,25 +1,30 @@
-package com.example.chatioandroid
+package com.example.chatioandroid.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import com.example.chatioandroid.R
 import com.example.chatioandroid.databinding.ActivityMainBinding
+import com.example.chatioandroid.utils.BASE_URL
+import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.IO
 import io.socket.client.Socket
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 private const val TAG = "MainActivity"
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     //    private val hostUrl = "http://localhost:3000/"
 //    private val hostUrl = "http://192.168.154.9:3000/"
-    private val hostUrl = "http://10.0.2.2:3000"
+    private val hostUrl = BASE_URL//"http://10.0.2.2:3000"
 
     private lateinit var socketIO: Socket
     private var sentMessages = ""
@@ -29,6 +34,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navContainer) as NavHostFragment
+        navHostFragment.navController
 
         binding.apply {
             edtMessage.doAfterTextChanged {
@@ -54,11 +63,11 @@ class MainActivity : AppCompatActivity() {
         socketIO = IO.socket(hostUrl)
         socketIO.apply {
             on("connect") {
-                Log.d(TAG, "connected with ${id()}")
+                Timber.tag(TAG).d("connected with " + id())
             }
 
             on("message") {
-                Log.d(TAG, "New Message: ${it[0]}")
+                Timber.tag(TAG).d("New Message: " + it[0])
                 receivedMessages = "$receivedMessages \n ${it[0]}"
                 lifecycleScope.launch {
                     binding.tvReceived.text = receivedMessages
@@ -66,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
                 on("disconnect") {
-                    Log.d(TAG, "Disconnected from server")
+                    Timber.tag(TAG).d("Disconnected from server")
                 }
             }
 

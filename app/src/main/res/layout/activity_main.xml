@@ -5,15 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="6dp"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navContainer"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
 
     <TextView
         android:id="@+id/tvSent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_margin="@dimen/dimen_16dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/edtMessage"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Send" />
@@ -22,8 +30,9 @@
         android:id="@+id/tvReceived"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_margin="@dimen/dimen_16dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/tvSent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Received" />
@@ -36,6 +45,7 @@
         android:enabled="false"
         android:text="@string/send"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -44,6 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/message"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/btnSend"
         app:layout_constraintEnd_toStartOf="@id/btnSend"
         app:layout_constraintStart_toStartOf="parent" />
