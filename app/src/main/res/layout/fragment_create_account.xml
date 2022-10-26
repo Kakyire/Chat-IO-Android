@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_marginHorizontal="@dimen/dimen_16dp">
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernameLayout"
         android:layout_width="match_parent"
@@ -12,7 +13,7 @@
         android:layout_marginTop="40dp"
         android:hint="@string/username"
         app:layout_constraintTop_toTopOf="parent"
-        app:placeholderText="name@example.com">
+        app:placeholderText="user">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtUsername"
@@ -20,6 +21,7 @@
             android:layout_height="match_parent"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
@@ -51,6 +53,7 @@
             android:layout_height="match_parent"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/confirmPasswordLayout"
         android:layout_width="match_parent"
@@ -91,9 +94,20 @@
         android:id="@+id/btnHaveAccount"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
-        app:layout_constraintTop_toTopOf="@id/tvLoginInfo"
         android:layout_height="wrap_content"
         android:text="@string/login"
-app:layout_constraintBottom_toBottomOf="@id/tvLoginInfo"        android:textAllCaps="false"
-        app:layout_constraintStart_toEndOf="@id/tvLoginInfo" />
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="@id/tvLoginInfo"
+        app:layout_constraintStart_toEndOf="@id/tvLoginInfo"
+        app:layout_constraintTop_toTopOf="@id/tvLoginInfo" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

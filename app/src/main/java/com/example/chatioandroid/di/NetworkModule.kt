@@ -1,5 +1,6 @@
 package com.example.chatioandroid.di
 
+import com.example.chatioandroid.data.AuthenticationInterceptor
 import com.example.chatioandroid.data.api.ApiService
 import com.example.chatioandroid.utils.BASE_URL
 import com.example.chatioandroid.utils.OK_HTTP_TIMEOUT
@@ -34,13 +35,15 @@ class NetworkModule {
         .create()
 
 
-
     @Provides
-    fun provideOkHttpClient()= OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().apply { level= HttpLoggingInterceptor.Level.BODY })
-//        .addNetworkInterceptor{AuthenticationInterceptor().intercept(it)}
-        .connectTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-        .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-        .writeTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
-        .build()
+    fun provideOkHttpClient(authenticationInterceptor: AuthenticationInterceptor) =
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .addNetworkInterceptor { authenticationInterceptor.intercept(it) }
+            .connectTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+            .writeTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
+            .build()
 }

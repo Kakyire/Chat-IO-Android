@@ -12,8 +12,8 @@ private const val API="api/v1/"
 
 
 //routes
-const val SIGNUP_ROUTE ="signup"
-const val LOGIN_ROUTE ="login"
+const val SIGNUP_ROUTE ="${API}auth/signup"
+const val LOGIN_ROUTE ="${API}auth/login"
 
 
 

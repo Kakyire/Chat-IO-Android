@@ -6,6 +6,7 @@ import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.data.model.response.AuthResponse
 import com.example.chatioandroid.utils.LOGIN_ROUTE
 import com.example.chatioandroid.utils.SIGNUP_ROUTE
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -18,8 +19,8 @@ import retrofit2.http.POST
 interface ApiService {
 
     @POST(LOGIN_ROUTE)
-    suspend fun login(@Body loginRequest: LoginRequest): ApiResponse<AuthResponse>
+    suspend fun login(@Body loginRequest: LoginRequest): Response<ApiResponse<AuthResponse>>
 
     @POST(SIGNUP_ROUTE)
-    suspend fun signUp(@Body signUpRequest: SignUpRequest): ApiResponse<AuthResponse>
+    suspend fun signUp(@Body signUpRequest: SignUpRequest): Response<ApiResponse<AuthResponse>>
 }

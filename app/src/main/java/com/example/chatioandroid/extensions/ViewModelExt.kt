@@ -3,6 +3,8 @@ package com.example.chatioandroid.extensions
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.chatioandroid.data.model.response.ApiResponse
+import com.example.chatioandroid.data.model.response.AuthResponse
 import com.example.chatioandroid.utils.DataState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -17,15 +19,17 @@ import kotlinx.coroutines.launch
 
 fun <T> ViewModel.emitFlowResults(
     liveData: MutableLiveData<DataState<T>>,
-    request: () -> Flow<T>
+    request: () -> Flow<DataState<T>>
 ) {
     viewModelScope.launch(Dispatchers.IO) {
         request()
             .onStart { liveData.postValue(DataState.Loading) }
             .onEach {
-                liveData.postValue(DataState.Success(it))
+                liveData.postValue(it)
             }
-            .catch { liveData.postValue(DataState.Error(it.localizedMessage!!)) }
+            .catch {
+                liveData.postValue(DataState.Error(it.localizedMessage))
+            }
             .launchIn(this)
     }
 }

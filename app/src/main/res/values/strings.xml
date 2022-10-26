@@ -12,4 +12,7 @@
     <string name="username">Username</string>
     <string name="under_development">Under development</string>
     <string name="logout">Logout</string>
+    <string name="emal_is_required">Email is required</string>
+    <string name="enter_valid_email">Enter valid email</string>
+    <string name="password_is_required">Password is required</string>
 </resources>

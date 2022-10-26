@@ -4,6 +4,7 @@ import com.example.chatioandroid.data.model.request.LoginRequest
 import com.example.chatioandroid.data.model.request.SignUpRequest
 import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.data.model.response.AuthResponse
+import com.example.chatioandroid.utils.DataState
 import kotlinx.coroutines.flow.Flow
 
 
@@ -14,6 +15,6 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AuthRepository {
 
-    fun login(loginRequest: LoginRequest): Flow<ApiResponse<AuthResponse>>
-    fun signUp(signUpRequest: SignUpRequest): Flow<ApiResponse<AuthResponse>>
+    fun login(loginRequest: LoginRequest): Flow<DataState<ApiResponse<AuthResponse>>>
+    fun signUp(signUpRequest: SignUpRequest): Flow<DataState<ApiResponse<AuthResponse>>>
 }

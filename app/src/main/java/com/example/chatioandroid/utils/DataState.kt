@@ -10,6 +10,6 @@ import java.lang.Exception
  */
 sealed class DataState<out R> {
     class Success<T>(val data: T) : DataState<T>()
-    class Error(val message: String) : DataState<Nothing>()
+    class Error(val message:String) : DataState<Nothing>()
     object Loading : DataState<Nothing>()
 }

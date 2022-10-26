@@ -3,6 +3,7 @@ package com.example.chatioandroid.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.chatioandroid.data.model.request.LoginRequest
 import com.example.chatioandroid.data.model.request.SignUpRequest
 import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.data.model.response.AuthResponse
@@ -32,5 +33,9 @@ class MainViewModel @Inject constructor(private val authRepository: AuthReposito
 
     fun createAccount(signUpRequest: SignUpRequest) = emitFlowResults(_signUp) {
         authRepository.signUp(signUpRequest)
+    }
+
+    fun signIn(loginRequest: LoginRequest)=emitFlowResults(_login){
+        authRepository.login(loginRequest)
     }
 }

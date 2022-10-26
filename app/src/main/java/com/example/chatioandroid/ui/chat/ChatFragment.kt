@@ -13,7 +13,10 @@ import com.example.chatioandroid.R
 import com.example.chatioandroid.databinding.FragmentChatBinding
 import com.example.chatioandroid.extensions.createMenu
 import com.example.chatioandroid.extensions.navigateToNextPage
+import com.example.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
+import com.example.chatioandroid.preferences.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 /**
@@ -28,6 +31,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
     private lateinit var binding: FragmentChatBinding
 
+    @Inject
+    lateinit var preferenceManager: PreferenceManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentChatBinding.bind(view)
@@ -39,6 +45,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private fun createOptionMenu() {
         createMenu(R.menu.chat_menu) {
             if (it == R.id.menLogout) {
+                preferenceManager.save(IS_USER_LOGGED_IN, false)
                 navigateToNextPage(
                     ChatFragmentDirections
                         .actionChatFragmentToLoginFragment()
