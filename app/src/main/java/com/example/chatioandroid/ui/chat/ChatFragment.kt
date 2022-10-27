@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.chatioandroid.R
+import com.example.chatioandroid.data.model.response.UserResponse
 import com.example.chatioandroid.databinding.FragmentChatBinding
 import com.example.chatioandroid.extensions.createMenu
 import com.example.chatioandroid.extensions.navigateToNextPage
@@ -55,9 +56,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         getUsersList()
         observeLiveData(usersList) {
             chatListAdapter.submitList(it.users)
-         
-          Timber.tag(TAG).d("Users ${Gson().toJson(it)}")
-          }
+
+            Timber.tag(TAG).d("Users ${Gson().toJson(it)}")
+        }
     }
 
     private fun setupRecyclerView() = with(binding) {
@@ -82,6 +83,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
     override fun onItemClick(model: Any) {
 
         Timber.tag(TAG).d("$model")
+        val user = model as UserResponse
+        navigateToNextPage(ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(user.id))
 
     }
 

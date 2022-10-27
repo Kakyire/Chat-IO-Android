@@ -5,6 +5,8 @@ import com.example.chatioandroid.data.model.response.UserResponse
 import com.example.chatioandroid.data.model.response.UsersListResponse
 import com.example.chatioandroid.utils.DataState
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
+import retrofit2.http.Path
 
 
 /**
@@ -15,4 +17,5 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     fun getUserProfile(): Flow<DataState<ApiResponse<UserResponse>>>
     fun getUsers(): Flow<DataState<ApiResponse<UsersListResponse>>>
+    fun getOtherUserProfile(id: String): Flow<DataState<ApiResponse<UserResponse>>>
 }

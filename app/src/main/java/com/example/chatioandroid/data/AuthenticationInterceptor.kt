@@ -1,9 +1,8 @@
 package com.example.chatioandroid.data
 
-import com.example.chatioandroid.preferences.Keys.ACCESS_TOKEN
+ import com.example.chatioandroid.preferences.Keys.ACCESS_TOKEN
 import com.example.chatioandroid.preferences.PreferenceManager
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 import javax.inject.Inject
 

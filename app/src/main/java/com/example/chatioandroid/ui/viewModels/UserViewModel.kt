@@ -24,10 +24,17 @@ class UserViewModel @Inject constructor(private val userRepository: UserReposito
     private val _userProfile = MutableLiveData<DataState<ApiResponse<UserResponse>>>()
     val userProfile: LiveData<DataState<ApiResponse<UserResponse>>> = _userProfile
 
+
+    private val _otherProfile = MutableLiveData<DataState<ApiResponse<UserResponse>>>()
+    val otherProfile: LiveData<DataState<ApiResponse<UserResponse>>> = _otherProfile
+
     private val _usersList = MutableLiveData<DataState<ApiResponse<UsersListResponse>>>()
     val usersList: LiveData<DataState<ApiResponse<UsersListResponse>>> = _usersList
 
     fun getUserProfile() = emitFlowResults(_userProfile) { userRepository.getUserProfile() }
+
+    fun getOtherUserProfile(id: String) =
+        emitFlowResults(_otherProfile) { userRepository.getOtherUserProfile(id) }
 
     fun getUsersList() = emitFlowResults(_usersList) { userRepository.getUsers() }
 }

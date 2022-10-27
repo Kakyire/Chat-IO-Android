@@ -16,6 +16,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.utils.DataState
+import timber.log.Timber
 
 
 /**
@@ -59,6 +60,9 @@ fun <T> Fragment.observeLiveData(
             is DataState.Error -> {
                 progressBar?.isVisible = false
                 toast(response.message)
+
+                  Timber.tag(TAG).d("${response.message}")
+
             }
             is DataState.Success -> {
                 progressBar?.isVisible = false
@@ -73,4 +77,6 @@ fun <T> Fragment.observeLiveData(
 
     }
 }
+
+private const val TAG = "FragmentExt"
 

@@ -40,7 +40,11 @@
         android:id="@+id/chatDetailsFragment"
         android:name="com.example.chatioandroid.ui.chat.ChatDetailsFragment"
         android:label="ChatDetailsFragment"
-        tools:layout="@layout/fragment_chat_details" />
+        tools:layout="@layout/fragment_chat_details" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/chatFragment"
         android:name="com.example.chatioandroid.ui.chat.ChatFragment"

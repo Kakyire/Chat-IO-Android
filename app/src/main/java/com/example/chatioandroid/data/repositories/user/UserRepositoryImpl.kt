@@ -23,4 +23,8 @@ class UserRepositoryImpl @Inject constructor(private val apiService: ApiService)
     override fun getUsers(): Flow<DataState<ApiResponse<UsersListResponse>>> {
         return makeNetworkCall { apiService.getUsers() }
     }
+
+    override fun getOtherUserProfile(id: String): Flow<DataState<ApiResponse<UserResponse>>> {
+        return makeNetworkCall { apiService.getOtherUserProfile(id) }
+    }
 }
