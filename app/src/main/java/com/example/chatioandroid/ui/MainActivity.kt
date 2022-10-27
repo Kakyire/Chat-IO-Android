@@ -35,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+          Timber.tag(TAG).d("Home")
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.navContainer) as NavHostFragment
         navHostFragment.navController

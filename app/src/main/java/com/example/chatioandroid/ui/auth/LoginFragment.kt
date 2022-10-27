@@ -10,17 +10,12 @@ import com.example.chatioandroid.data.model.request.LoginRequest
 import com.example.chatioandroid.databinding.FragmentLoginBinding
 import com.example.chatioandroid.extensions.navigateToNextPage
 import com.example.chatioandroid.extensions.observeLiveData
-import com.example.chatioandroid.extensions.toast
-import com.example.chatioandroid.preferences.Keys
 import com.example.chatioandroid.preferences.Keys.ACCESS_TOKEN
 import com.example.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
 import com.example.chatioandroid.preferences.PreferenceManager
-import com.example.chatioandroid.ui.MainViewModel
-import com.example.chatioandroid.utils.DataState
+import com.example.chatioandroid.ui.viewModels.MainViewModel
 import com.example.chatioandroid.utils.EmailValidation.isEmailValid
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 

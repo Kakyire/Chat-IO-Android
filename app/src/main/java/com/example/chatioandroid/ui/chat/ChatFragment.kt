@@ -1,21 +1,22 @@
 package com.example.chatioandroid.ui.chat
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
+import androidx.fragment.app.viewModels
 import com.example.chatioandroid.R
 import com.example.chatioandroid.databinding.FragmentChatBinding
 import com.example.chatioandroid.extensions.createMenu
 import com.example.chatioandroid.extensions.navigateToNextPage
+import com.example.chatioandroid.extensions.observeLiveData
 import com.example.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
 import com.example.chatioandroid.preferences.PreferenceManager
+import com.example.chatioandroid.ui.chat.adapters.ChatListAdapter
+import com.example.chatioandroid.ui.viewModels.UserViewModel
+import com.example.chatioandroid.utils.OnItemClickListener
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -25,14 +26,20 @@ import javax.inject.Inject
  * https://github.com/kakyire
  */
 
+private const val TAG = "ChatFragment"
 
 @AndroidEntryPoint
-class ChatFragment : Fragment(R.layout.fragment_chat) {
+class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
 
     private lateinit var binding: FragmentChatBinding
 
+    private val userViewModel by viewModels<UserViewModel>()
+
     @Inject
     lateinit var preferenceManager: PreferenceManager
+
+    @Inject
+    lateinit var chatListAdapter: ChatListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,6 +47,21 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         createOptionMenu()
         clickListeners()
+        setupRecyclerView()
+        observeViewModelCallbacks()
+    }
+
+    private fun observeViewModelCallbacks() = with(userViewModel) {
+        getUsersList()
+        observeLiveData(usersList) {
+            chatListAdapter.submitList(it.users)
+         
+          Timber.tag(TAG).d("Users ${Gson().toJson(it)}")
+          }
+    }
+
+    private fun setupRecyclerView() = with(binding) {
+        rvUsers.adapter = chatListAdapter
     }
 
     private fun createOptionMenu() {
@@ -55,12 +77,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun clickListeners() = with(binding) {
-        btnChat.setOnClickListener {
-            navigateToNextPage(
-                ChatFragmentDirections
-                    .actionChatFragmentToChatDetailsFragment()
-            )
-        }
+    }
+
+    override fun onItemClick(model: Any) {
+
+        Timber.tag(TAG).d("$model")
+
     }
 
 

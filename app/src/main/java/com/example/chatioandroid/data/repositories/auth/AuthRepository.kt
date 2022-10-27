@@ -4,6 +4,8 @@ import com.example.chatioandroid.data.model.request.LoginRequest
 import com.example.chatioandroid.data.model.request.SignUpRequest
 import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.data.model.response.AuthResponse
+import com.example.chatioandroid.data.model.response.UserResponse
+import com.example.chatioandroid.data.model.response.UsersListResponse
 import com.example.chatioandroid.utils.DataState
 import kotlinx.coroutines.flow.Flow
 

@@ -1,7 +1,9 @@
 package com.example.chatioandroid.application
 
 import android.app.Application
+import com.example.chatioandroid.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 
 /**
@@ -11,4 +13,8 @@ import dagger.hilt.android.HiltAndroidApp
  */
 @HiltAndroidApp
 class ChatIOApp :Application(){
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+    }
 }

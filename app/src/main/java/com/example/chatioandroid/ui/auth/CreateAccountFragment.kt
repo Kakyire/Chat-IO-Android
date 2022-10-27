@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.chatioandroid.R
 import com.example.chatioandroid.data.model.request.SignUpRequest
 import com.example.chatioandroid.databinding.FragmentCreateAccountBinding
@@ -14,11 +13,9 @@ import com.example.chatioandroid.extensions.observeLiveData
 import com.example.chatioandroid.preferences.Keys.ACCESS_TOKEN
 import com.example.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
 import com.example.chatioandroid.preferences.PreferenceManager
-import com.example.chatioandroid.ui.MainViewModel
+import com.example.chatioandroid.ui.viewModels.MainViewModel
 import com.example.chatioandroid.utils.EmailValidation.isEmailValid
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
 import javax.inject.Inject
 
 

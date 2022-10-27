@@ -5,6 +5,8 @@ import com.example.chatioandroid.data.model.request.LoginRequest
 import com.example.chatioandroid.data.model.request.SignUpRequest
 import com.example.chatioandroid.data.model.response.ApiResponse
 import com.example.chatioandroid.data.model.response.AuthResponse
+import com.example.chatioandroid.data.model.response.UserResponse
+import com.example.chatioandroid.data.model.response.UsersListResponse
 import com.example.chatioandroid.utils.DataState
 import com.example.chatioandroid.utils.makeNetworkCall
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +21,9 @@ import javax.inject.Inject
  */
 class AuthRepositoryImpl @Inject constructor(private val apiService: ApiService) : AuthRepository {
     override fun login(loginRequest: LoginRequest): Flow<DataState<ApiResponse<AuthResponse>>> {
-        return makeNetworkCall { apiService.login(loginRequest) }}
+        return makeNetworkCall { apiService.login(loginRequest) }
+    }
+
     override fun signUp(signUpRequest: SignUpRequest): Flow<DataState<ApiResponse<AuthResponse>>> {
         return makeNetworkCall { apiService.signUp(signUpRequest) }
     }
