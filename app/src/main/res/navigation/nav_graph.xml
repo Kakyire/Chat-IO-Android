@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/createAccountFragment"
-        android:name="com.example.chatioandroid.ui.auth.CreateAccountFragment"
+        android:name="com.kakyiretechnologies.chatioandroid.ui.auth.CreateAccountFragment"
         android:label="CreateAccountFragment"
         tools:layout="@layout/fragment_create_account">
         <action
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.chatioandroid.ui.auth.LoginFragment"
+        android:name="com.kakyiretechnologies.chatioandroid.ui.auth.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -38,17 +38,26 @@
     </fragment>
     <fragment
         android:id="@+id/chatDetailsFragment"
-        android:name="com.example.chatioandroid.ui.chat.ChatDetailsFragment"
-        android:label="ChatDetailsFragment"
-        tools:layout="@layout/fragment_chat_details" >
+        android:name="com.kakyiretechnologies.chatioandroid.ui.chat.ChatDetailsFragment"
+        android:label="{username}"
+        tools:layout="@layout/fragment_chat_details">
         <argument
-            android:name="id"
+            android:name="chatId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+
+        <argument
+            android:name="receiverId"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="com.example.chatioandroid.ui.chat.ChatFragment"
-        android:label="ChatFragment"
+        android:name="com.kakyiretechnologies.chatioandroid.ui.chat.ChatFragment"
+        android:label="Chats"
         tools:layout="@layout/fragment_chat">
         <action
             android:id="@+id/action_chatFragment_to_chatDetailsFragment"
@@ -57,6 +66,20 @@
             android:id="@+id/action_chatFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/chatFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_chatFragment_to_startChatFragment"
+            app:destination="@id/startChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startChatFragment"
+        android:name="com.kakyiretechnologies.chatioandroid.ui.user.StartChatFragment"
+        android:label="New Chat"
+        tools:layout="@layout/fragment_start_chat">
+        <action
+            android:id="@+id/action_startChatFragment_to_chatDetailsFragment"
+            app:destination="@id/chatDetailsFragment"
+            app:popUpTo="@id/startChatFragment"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

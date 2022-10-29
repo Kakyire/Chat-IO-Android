@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.chatioandroid'
+    namespace 'com.kakyiretechnologies.chatioandroid'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.chatioandroid"
+        applicationId "com.kakyiretechnologies.chatioandroid"
         minSdk 23
         targetSdk 33
         versionCode 1
@@ -44,7 +44,7 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'io.socket:socket.io-client:2.0.0'
     implementation 'com.tinder.scarlet:scarlet:0.1.12'
