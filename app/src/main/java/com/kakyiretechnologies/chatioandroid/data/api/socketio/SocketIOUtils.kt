@@ -47,6 +47,13 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
         }
     }
 
+    fun onEventReceive(event: String){
+        io.on(event){
+
+              Timber.tag(TAG).d("results ${it[0]}")
+
+        }
+    }
     fun <T : Any> onEventReceive(event: String, clazz: Class<T>, onReceived: (T) -> Unit) {
         io.on(event) {
             if (event.equals(
@@ -65,3 +72,5 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
 
 
 }
+
+private const val TAG = "SocketIOUtils"

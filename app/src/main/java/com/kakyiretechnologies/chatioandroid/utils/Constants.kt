@@ -22,6 +22,9 @@ const val SEND_MESSAGE_ROUTE ="${API}chat/send-message"
 const val CHATS_ROUTE ="${API}chat/chats"
 
 
+//socket io events
+const val SEND_MESSAGE="send-message"
+const val RECEIVE_MESSAGE="receive-message"
 
 
 const val OK_HTTP_TIMEOUT = 30L

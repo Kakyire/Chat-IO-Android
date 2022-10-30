@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.R
 import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
 import com.kakyiretechnologies.chatioandroid.data.model.request.MessageModelRequest
+import com.kakyiretechnologies.chatioandroid.data.model.response.MessagesListResponse
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentChatDetailsBinding
 import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
 import com.kakyiretechnologies.chatioandroid.extensions.observeLiveDataEvent
@@ -17,6 +19,8 @@ import com.kakyiretechnologies.chatioandroid.extensions.toast
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
 import com.kakyiretechnologies.chatioandroid.ui.chat.adapters.MessagesListAdapter
+import com.kakyiretechnologies.chatioandroid.utils.RECEIVE_MESSAGE
+import com.kakyiretechnologies.chatioandroid.utils.SEND_MESSAGE
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -63,8 +67,17 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
         onTextChangeListener()
         observeViewModelCallbacks()
 
- 
-  Timber.tag(TAG).d("userName: ${args.username}")
+
+//        socketIOUtils.onEventReceive(RECEIVE_MESSAGE,MessagesListResponse::class.java){
+//            Timber.tag(TAG).d("receivedMessage: $it")
+//
+//        }
+        socketIOUtils.onEventReceive(RECEIVE_MESSAGE,MessagesListResponse::class.java){
+            messagesListAdapter.submitList(it.messages)
+             
+              Timber.tag(TAG).d("messages: ${Gson().toJson(it.messages)}}")
+              
+        }
       }
 
     private fun onTextChangeListener() = with(binding) {
@@ -96,7 +109,7 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
             receiverId = args.receiverId
         )
 
-//        socketIOUtils.sendEvent()
+        socketIOUtils.sendEvent(SEND_MESSAGE,messageModelRequest)
         chatViewModel.sendMessage(messageModelRequest)
         edtMessage.setText("")
     }
