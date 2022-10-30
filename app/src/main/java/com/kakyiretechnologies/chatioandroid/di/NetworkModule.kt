@@ -1,6 +1,8 @@
 package com.kakyiretechnologies.chatioandroid.di
 
+import com.kakyiretechnologies.chatioandroid.data.AuthenticationInterceptor
 import com.kakyiretechnologies.chatioandroid.data.api.ApiService
+import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
 import com.kakyiretechnologies.chatioandroid.utils.BASE_URL
 import com.kakyiretechnologies.chatioandroid.utils.OK_HTTP_TIMEOUT
 import dagger.Module
@@ -13,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 
 /**
@@ -35,7 +38,7 @@ class NetworkModule {
 
 
     @Provides
-    fun provideOkHttpClient(authenticationInterceptor: com.kakyiretechnologies.chatioandroid.data.AuthenticationInterceptor) =
+    fun provideOkHttpClient(authenticationInterceptor: AuthenticationInterceptor) =
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -45,4 +48,10 @@ class NetworkModule {
             .readTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(OK_HTTP_TIMEOUT, TimeUnit.SECONDS)
             .build()
+
+    @Provides
+    @Singleton
+    fun provideSocketIO(): SocketIOUtils {
+        return SocketIOUtils(url = BASE_URL)
+    }
 }

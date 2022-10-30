@@ -10,7 +10,7 @@ data class Message(
     @SerializedName("_id")
     val id: String,
     val sender: Participant,
-    val `receiver`: Participant,
+    val `receiver`: String,
     val chatId: String,
     val text: String,
     val createdAt: String,

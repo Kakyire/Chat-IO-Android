@@ -5,8 +5,10 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.kakyiretechnologies.chatioandroid.R
+import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
 import com.kakyiretechnologies.chatioandroid.data.model.request.MessageModelRequest
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentChatDetailsBinding
 import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
@@ -42,6 +44,9 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
     lateinit var preferenceManager: PreferenceManager
 
     @Inject
+    lateinit var socketIOUtils: SocketIOUtils
+
+    @Inject
     lateinit var messagesListAdapter: MessagesListAdapter
 
     private val currentUserId by lazy {
@@ -57,7 +62,10 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
         clickListeners()
         onTextChangeListener()
         observeViewModelCallbacks()
-    }
+
+ 
+  Timber.tag(TAG).d("userName: ${args.username}")
+      }
 
     private fun onTextChangeListener() = with(binding) {
         edtMessage.doAfterTextChanged { btnSend.isEnabled = !it.isNullOrEmpty() }
@@ -88,6 +96,7 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
             receiverId = args.receiverId
         )
 
+//        socketIOUtils.sendEvent()
         chatViewModel.sendMessage(messageModelRequest)
         edtMessage.setText("")
     }

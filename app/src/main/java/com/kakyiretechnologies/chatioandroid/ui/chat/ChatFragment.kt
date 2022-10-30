@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.R
+import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
 import com.kakyiretechnologies.chatioandroid.data.model.response.Chat
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentChatBinding
 import com.kakyiretechnologies.chatioandroid.extensions.createMenu
@@ -14,6 +15,7 @@ import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
+import com.kakyiretechnologies.chatioandroid.ui.MainActivity
 import com.kakyiretechnologies.chatioandroid.ui.chat.adapters.ChatListAdapter
 import com.kakyiretechnologies.chatioandroid.utils.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,6 +43,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
 
     @Inject
     lateinit var chatListAdapter: ChatListAdapter
+
+    @Inject
+    lateinit var socketIOUtils: SocketIOUtils
 
     private val currentUserId by lazy {
         preferenceManager.getString(USER_ID)
@@ -82,6 +87,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
                     ChatFragmentDirections
                         .actionChatFragmentToLoginFragment()
                 )
+                socketIOUtils.disconnect()
             }
         }
     }
@@ -95,20 +101,25 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        socketIOUtils.connect()
+    }
+
     override fun onItemClick(model: Any) {
 
-        Timber.tag(TAG).d("$model")
         val chat = model as Chat
-        val user = chat.participants.find { chat.id != currentUserId!! }!!
+        if (currentUserId != null) {
+            val user = chat.participants.find { it.id != currentUserId }!!
 
-        navigateToNextPage(
-            ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(
-                chatId = chat.id,
-                username = user.username,
-                receiverId = user.id
+            navigateToNextPage(
+                ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(
+                    chatId = chat.id,
+                    username = user.username,
+                    receiverId = user.id
+                )
             )
-        )
-
+        }
     }
 
 

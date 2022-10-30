@@ -12,6 +12,7 @@ import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
 import com.kakyiretechnologies.chatioandroid.ui.user.adapters.UsersListAdapter
 import com.kakyiretechnologies.chatioandroid.utils.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -52,6 +53,9 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
 
     override fun onItemClick(model: Any) {
         val user = model as UserResponse
+
+        Timber.tag(TAG).d("username:${user.username}")
+
         navigateToNextPage(
             StartChatFragmentDirections
                 .actionStartChatFragmentToChatDetailsFragment(
@@ -60,3 +64,5 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
         )
     }
 }
+
+private const val TAG = "StartChatFragment"

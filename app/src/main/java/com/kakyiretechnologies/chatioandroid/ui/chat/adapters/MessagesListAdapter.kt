@@ -6,7 +6,9 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.data.model.response.Message
+import com.kakyiretechnologies.chatioandroid.databinding.MessageItemBinding
 import com.kakyiretechnologies.chatioandroid.databinding.MessagesListBinding
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,6 +19,8 @@ import javax.inject.Inject
  * Created by Daniel Frimpong on October 28, 2022.
  * https://github.com/kakyire
  */
+private const val TAG = "MessagesListAdapter"
+
 class MessagesListAdapter @Inject constructor() :
     ListAdapter<Message, MessagesListAdapter.MessagesListViewHolder>(DIFF_UTIL) {
 
@@ -38,26 +42,24 @@ class MessagesListAdapter @Inject constructor() :
 
         fun bind(message: Message) = with(binding) {
 
+            Timber.tag(TAG).d("messages:${Gson().toJson(message)}")
+
             if (userId != null) {
 
                 if (message.sender.id == userId) {
-                    senderMessage.apply {
-                        root.isVisible=true
-                        tvMessage.text = message.text
-                        tvUsername.text = message.sender.username
-                    }
+                    senderMessage.setMessage(message)
                 } else {
-                    receiverMessage.apply {
-                        root.isVisible=true
-                        tvMessage.text = message.text
-                        tvUsername.text = message.receiver.username
-                    }
+                    receiverMessage.setMessage(message)
                 }
             }
 
         }
 
-
+        private fun MessageItemBinding.setMessage(message: Message) {
+            root.isVisible = true
+            tvMessage.text = message.text
+            tvUsername.text = message.sender.username
+        }
     }
 
     companion object {

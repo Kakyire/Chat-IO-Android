@@ -49,7 +49,7 @@ class CreateAccountFragment : Fragment(R.layout.fragment_create_account) {
         observeLiveData(signUp, progressBar = binding.progressBar) {
 
 
-            saveUserPrefs(preferenceManager,it)
+            saveUserPrefs(preferenceManager, it)
 
             navigateToNextPage(
                 CreateAccountFragmentDirections

@@ -16,7 +16,9 @@ import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.kakyiretechnologies.chatioandroid.data.model.response.ApiResponse
 import com.kakyiretechnologies.chatioandroid.data.model.response.UserResponse
-import com.kakyiretechnologies.chatioandroid.preferences.Keys
+import com.kakyiretechnologies.chatioandroid.preferences.Keys.ACCESS_TOKEN
+import com.kakyiretechnologies.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
+import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
 import com.kakyiretechnologies.chatioandroid.utils.DataState
 import com.kakyiretechnologies.chatioandroid.utils.livedata.Event
@@ -66,7 +68,7 @@ fun <T> Fragment.observeLiveData(
                 progressBar?.isVisible = false
                 toast(response.message)
 
-                  Timber.tag(TAG).d("${response.message}")
+                  Timber.tag(TAG).d(response.message)
 
             }
             is DataState.Success -> {
@@ -95,7 +97,7 @@ fun <T> Fragment.observeLiveDataEvent(
                 progressBar?.isVisible = false
                 toast(response.message)
 
-                Timber.tag(TAG).d("${response.message}")
+                Timber.tag(TAG).d(response.message)
 
             }
             is DataState.Success -> {
@@ -112,11 +114,11 @@ fun <T> Fragment.observeLiveDataEvent(
     })
 }
 
-fun Fragment.saveUserPrefs(preferenceManager: PreferenceManager,user:UserResponse){
+fun saveUserPrefs(preferenceManager: PreferenceManager, user: UserResponse){
     preferenceManager.apply {
-        save(Keys.IS_USER_LOGGED_IN, true)
-        save(Keys.ACCESS_TOKEN, user.token)
-        save(Keys.USER_ID,user.id)
+        save(IS_USER_LOGGED_IN, true)
+        save(ACCESS_TOKEN, user.token)
+        save(USER_ID,user.id)
     }
 }
 

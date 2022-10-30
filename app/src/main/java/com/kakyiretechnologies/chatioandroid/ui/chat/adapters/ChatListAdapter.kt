@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.kakyiretechnologies.chatioandroid.data.model.response.Chat
 import com.kakyiretechnologies.chatioandroid.databinding.ChatListItemsBinding
 import com.kakyiretechnologies.chatioandroid.utils.OnItemClickListener
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -42,6 +43,9 @@ class ChatListAdapter @Inject constructor(
                 val user = chat.participants.find {
                     it.id != userId
                 }
+
+                  Timber.tag(TAG).d("username: ${user?.username}")
+
                 tvUsername.text = user?.username
             }
             root.setOnClickListener { listener.onItemClick(chat) }
@@ -61,3 +65,5 @@ class ChatListAdapter @Inject constructor(
         }
     }
 }
+
+private const val TAG = "ChatListAdapter"

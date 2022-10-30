@@ -10,7 +10,7 @@ import com.kakyiretechnologies.chatioandroid.BuildConfig
  * Created by Daniel Frimpong on October 25, 2022.
  * https://github.com/kakyire
  */
-class PreferenceManager(private val context: Context, private val gson: Gson = Gson()) {
+class PreferenceManager(context: Context, private val gson: Gson = Gson()) {
 
     private val preferencesName = "${BuildConfig.APPLICATION_ID}_shared_prefs"
 
@@ -64,7 +64,7 @@ class PreferenceManager(private val context: Context, private val gson: Gson = G
         return sharedPreferences.getFloat(key, defValue)
     }
 
-    fun <T> getObject(@PreferenceKeys keys: String, type: Class<T>? = null): T? {
+    fun <T> getObject(@PreferenceKeys keys: String, type: Class<T>): T? {
         val obj = sharedPreferences.getString(keys, null)
         return gson.fromJson(obj, type)
     }

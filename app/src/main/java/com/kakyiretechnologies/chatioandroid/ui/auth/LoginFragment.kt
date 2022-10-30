@@ -71,7 +71,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun observeViewModelCallbacks() = with(authViewModel) {
         observeLiveData(login, progressBar = binding.progressBar) {
 
-          saveUserPrefs(preferenceManager,it)
+          saveUserPrefs(preferenceManager, it)
 
             navigateToNextPage(LoginFragmentDirections.actionLoginFragmentToChatFragment())
 
