@@ -26,8 +26,8 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(private val repository:ChatRepository) : ViewModel() {
 
 
-    private val _sentMessage = MutableLiveData<DataState<ApiResponse<MessageResponse>>>()
-    val sentMessage: LiveData<DataState<ApiResponse<MessageResponse>>> = _sentMessage
+    private val _sentMessage = MutableLiveData<Event<DataState<ApiResponse<MessageResponse>>>>()
+    val sentMessage: LiveData<Event<DataState<ApiResponse<MessageResponse>>>> = _sentMessage
 
 
     private val _messages = MutableLiveData<Event<DataState<ApiResponse<MessagesListResponse>>>>()
@@ -37,7 +37,7 @@ class ChatViewModel @Inject constructor(private val repository:ChatRepository) :
     private val _chats = MutableLiveData<DataState<ApiResponse<ChatListResponse>>>()
     val chats: LiveData<DataState<ApiResponse<ChatListResponse>>> = _chats
 
-    fun sendMessage (messageModelRequest: MessageModelRequest)=emitFlowResults(_sentMessage){
+    fun sendMessage (messageModelRequest: MessageModelRequest)=emitEventFlowResults(_sentMessage){
         repository.sendMessage(messageModelRequest)
     }
 

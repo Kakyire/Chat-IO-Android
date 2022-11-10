@@ -1,8 +1,13 @@
 package com.kakyiretechnologies.chatioandroid.data.api.socketio
 
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
+import com.kakyiretechnologies.chatioandroid.data.model.payload.OnlineUserPayload
+import com.kakyiretechnologies.chatioandroid.utils.ONLINE_USER_EVENT
 import io.socket.client.IO
 import io.socket.client.Socket
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
@@ -18,6 +23,9 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
 
 
     fun connect(): Socket? {
+
+          Timber.tag("TAG").d("Just connected to server")
+
         return io.connect()
     }
 
@@ -29,13 +37,10 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
     fun <T> sendEvent(event: String, message: T) {
         if (!io.connected()) throw IllegalAccessException("Socket IO is not connected")
 
-        io.emit(event, gson.toJson(message))
-    }
 
-    fun sendEvent(event: String, message: String) {
-        if (!io.connected()) throw IllegalAccessException("Socket IO is not connected")
-
-        io.emit(event, message)
+        val payload = if (message is String) message else gson.toJson(message)
+        Timber.tag(TAG).d(payload)
+        io.emit(event, payload)
     }
 
 
@@ -46,15 +51,11 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
             }
         }
     }
-
-    fun onEventReceive(event: String){
-        io.on(event){
-
-              Timber.tag(TAG).d("results ${it[0]}")
-
-        }
+    fun joinOnlineUsers(onlineUserPayload: OnlineUserPayload){
+       io.on("connect"){ sendEvent(ONLINE_USER_EVENT,onlineUserPayload)}
     }
-    fun <T : Any> onEventReceive(event: String, clazz: Class<T>, onReceived: (T) -> Unit) {
+
+    fun <T : Any>onEventReceive(event: String, fragment: Fragment,clazz: Class<T>, onReceived: (T) -> Unit) {
         io.on(event) {
             if (event.equals(
                     "connect",
@@ -65,7 +66,7 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
             }
             if (it.isNotEmpty()) {
                 val value = gson.fromJson(it[0].toString(), clazz)
-                onReceived(value)
+             fragment.  lifecycleScope.launch {  onReceived(value) }
             }
         }
     }

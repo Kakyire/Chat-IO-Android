@@ -6,10 +6,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.data.model.response.Message
-import com.kakyiretechnologies.chatioandroid.databinding.MessageItemBinding
 import com.kakyiretechnologies.chatioandroid.databinding.MessagesListBinding
+import com.kakyiretechnologies.chatioandroid.databinding.SenderMessageItemBinding
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,19 +48,22 @@ class MessagesListAdapter @Inject constructor() :
             if (userId != null) {
 
                 if (message.sender.id == userId) {
-                    senderMessage.setMessage(message)
+                    senderMessage.apply {
+                        root.isVisible = true
+                        tvMessage.text = message.text
+                        tvUsername.text = message.sender.username
+                    }
                 } else {
-                    receiverMessage.setMessage(message)
+                    receiverMessage.apply {
+                        root.isVisible = true
+                        tvMessage.text = message.text
+                        tvUsername.text = message.sender.username
+                    }
                 }
             }
 
         }
 
-        private fun MessageItemBinding.setMessage(message: Message) {
-            root.isVisible = true
-            tvMessage.text = message.text
-            tvUsername.text = message.sender.username
-        }
     }
 
     companion object {

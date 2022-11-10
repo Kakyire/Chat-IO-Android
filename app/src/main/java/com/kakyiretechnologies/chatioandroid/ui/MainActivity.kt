@@ -9,13 +9,12 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.kakyiretechnologies.chatioandroid.R
 import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
-import com.kakyiretechnologies.chatioandroid.data.model.response.Message
+import com.kakyiretechnologies.chatioandroid.data.model.payload.OnlineUserPayload
 import com.kakyiretechnologies.chatioandroid.databinding.ActivityMainBinding
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.IS_USER_LOGGED_IN
+import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
-import com.kakyiretechnologies.chatioandroid.utils.BASE_URL
 import dagger.hilt.android.AndroidEntryPoint
-import io.socket.client.Socket
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -80,16 +79,30 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        if (isUserLoggedIn) {
-            socketIOUtils.connect()
-        }
-        socketIOUtils.onConnect()
+
+        Timber.tag("TAG").d("onStart")
+
 
     }
 
     override fun onPause() {
         super.onPause()
         socketIOUtils.disconnect()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isUserLoggedIn) {
+            val userId = preferenceManager.getString(USER_ID)
+            val onlineUserPayload = OnlineUserPayload(userId!!)
+            socketIOUtils.apply {
+                connect()
+                joinOnlineUsers(onlineUserPayload)
+            }
+        }
+
+
+
     }
 
     override fun onDestroy() {

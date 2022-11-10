@@ -5,11 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.kakyiretechnologies.chatioandroid.R
+import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
+import com.kakyiretechnologies.chatioandroid.data.model.payload.NewChatPayload
 import com.kakyiretechnologies.chatioandroid.data.model.response.UserResponse
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentStartChatBinding
 import com.kakyiretechnologies.chatioandroid.extensions.navigateToNextPage
 import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
 import com.kakyiretechnologies.chatioandroid.ui.user.adapters.UsersListAdapter
+import com.kakyiretechnologies.chatioandroid.utils.NEW_CHAT_EVENT
 import com.kakyiretechnologies.chatioandroid.utils.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -31,6 +34,9 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
 
     @Inject
     lateinit var usersListAdapter: UsersListAdapter
+
+    @Inject
+    lateinit var socketIOUtils: SocketIOUtils
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -55,7 +61,9 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
         val user = model as UserResponse
 
         Timber.tag(TAG).d("username:${user.username}")
-
+        val newChatPayload = NewChatPayload(user.id)
+        
+        socketIOUtils.sendEvent(NEW_CHAT_EVENT, newChatPayload)
         navigateToNextPage(
             StartChatFragmentDirections
                 .actionStartChatFragmentToChatDetailsFragment(

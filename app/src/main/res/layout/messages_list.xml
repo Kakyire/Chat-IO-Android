@@ -8,17 +8,17 @@
 
     <include
         android:id="@+id/senderMessage"
-        layout="@layout/message_item"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        layout="@layout/sender_message_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
         android:id="@+id/receiverMessage"
-        layout="@layout/message_item"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        layout="@layout/receiver_message_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/senderMessage" />
 

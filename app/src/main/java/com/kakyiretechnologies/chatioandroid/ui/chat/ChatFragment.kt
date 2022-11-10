@@ -7,7 +7,10 @@ import androidx.fragment.app.viewModels
 import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.R
 import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
+import com.kakyiretechnologies.chatioandroid.data.model.payload.JoinChatPayload
+import com.kakyiretechnologies.chatioandroid.data.model.payload.OnlineUserPayload
 import com.kakyiretechnologies.chatioandroid.data.model.response.Chat
+import com.kakyiretechnologies.chatioandroid.data.model.response.ChatListResponse
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentChatBinding
 import com.kakyiretechnologies.chatioandroid.extensions.createMenu
 import com.kakyiretechnologies.chatioandroid.extensions.navigateToNextPage
@@ -17,6 +20,8 @@ import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
 import com.kakyiretechnologies.chatioandroid.ui.MainActivity
 import com.kakyiretechnologies.chatioandroid.ui.chat.adapters.ChatListAdapter
+import com.kakyiretechnologies.chatioandroid.utils.CHATS_EVENT
+import com.kakyiretechnologies.chatioandroid.utils.JOIN_CHAT_EVENT
 import com.kakyiretechnologies.chatioandroid.utils.OnItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -59,6 +64,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         clickListeners()
         setupRecyclerView()
         observeViewModelCallbacks()
+        socketIOUtils.onEventReceive(CHATS_EVENT, this, ChatListResponse::class.java) { response ->
+//            if (currentUserId != null) {
+            val chats = response.chats.distinct()
+            chatListAdapter.submitList(chats)
+//            }
+        }
     }
 
     private fun observeViewModelCallbacks() = with(chatViewModel) {
@@ -67,7 +78,6 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
 
             chatListAdapter.apply {
                 submitList(it.chats)
-                userId = currentUserId
             }
 
 
@@ -77,6 +87,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
 
     private fun setupRecyclerView() = with(binding) {
         rvUsers.adapter = chatListAdapter
+        chatListAdapter.userId = currentUserId
     }
 
     private fun createOptionMenu() {
@@ -101,9 +112,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        socketIOUtils.connect()
+    override fun onResume() {
+        super.onResume()
+        val onlineUserPayload = OnlineUserPayload(currentUserId!!)
+        socketIOUtils.apply {
+            connect()
+//            joinOnlineUsers(onlineUserPayload)
+        }
     }
 
     override fun onItemClick(model: Any) {
@@ -111,6 +126,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         val chat = model as Chat
         if (currentUserId != null) {
             val user = chat.participants.find { it.id != currentUserId }!!
+
+
+            val joinChatPayload = JoinChatPayload(chat.id)
+            socketIOUtils.sendEvent(JOIN_CHAT_EVENT, joinChatPayload)
 
             navigateToNextPage(
                 ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(

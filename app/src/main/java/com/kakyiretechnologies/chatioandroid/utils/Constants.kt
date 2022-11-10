@@ -7,7 +7,8 @@ package com.kakyiretechnologies.chatioandroid.utils
  * https://github.com/kakyire
  */
 
-const val BASE_URL="http://10.0.2.2:3000/"
+//const val BASE_URL="http://10.0.2.2:3000/"
+const val BASE_URL="https://chat-io-kakyire.vercel.app/"
 private const val API="api/v1/"
 
 
@@ -23,8 +24,11 @@ const val CHATS_ROUTE ="${API}chat/chats"
 
 
 //socket io events
-const val SEND_MESSAGE="send-message"
-const val RECEIVE_MESSAGE="receive-message"
+const val NEW_CHAT_EVENT="new-chat"
+const val CHAT_MESSAGES_EVENT="chat-message"
+const val CHATS_EVENT="chats"
+const val JOIN_CHAT_EVENT ="join-chat"
+const val ONLINE_USER_EVENT="online"
 
 
 const val OK_HTTP_TIMEOUT = 30L

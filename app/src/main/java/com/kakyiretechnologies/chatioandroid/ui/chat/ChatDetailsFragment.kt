@@ -5,22 +5,21 @@ import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.kakyiretechnologies.chatioandroid.R
 import com.kakyiretechnologies.chatioandroid.data.api.socketio.SocketIOUtils
 import com.kakyiretechnologies.chatioandroid.data.model.request.MessageModelRequest
+import com.kakyiretechnologies.chatioandroid.data.model.response.Message
 import com.kakyiretechnologies.chatioandroid.data.model.response.MessagesListResponse
 import com.kakyiretechnologies.chatioandroid.databinding.FragmentChatDetailsBinding
-import com.kakyiretechnologies.chatioandroid.extensions.observeLiveData
 import com.kakyiretechnologies.chatioandroid.extensions.observeLiveDataEvent
 import com.kakyiretechnologies.chatioandroid.extensions.toast
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.USER_ID
 import com.kakyiretechnologies.chatioandroid.preferences.PreferenceManager
 import com.kakyiretechnologies.chatioandroid.ui.chat.adapters.MessagesListAdapter
-import com.kakyiretechnologies.chatioandroid.utils.RECEIVE_MESSAGE
-import com.kakyiretechnologies.chatioandroid.utils.SEND_MESSAGE
+import com.kakyiretechnologies.chatioandroid.utils.CHAT_MESSAGES_EVENT
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import javax.inject.Inject
@@ -66,19 +65,34 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
         clickListeners()
         onTextChangeListener()
         observeViewModelCallbacks()
+        observeSocketEvents()
 
 
-//        socketIOUtils.onEventReceive(RECEIVE_MESSAGE,MessagesListResponse::class.java){
-//            Timber.tag(TAG).d("receivedMessage: $it")
-//
-//        }
-        socketIOUtils.onEventReceive(RECEIVE_MESSAGE,MessagesListResponse::class.java){
-            messagesListAdapter.submitList(it.messages)
-             
-              Timber.tag(TAG).d("messages: ${Gson().toJson(it.messages)}}")
-              
+    }
+
+    private fun observeSocketEvents() {
+        socketIOUtils.apply {
+            onEventReceive(
+                CHAT_MESSAGES_EVENT, this@ChatDetailsFragment,
+                MessagesListResponse::class.java
+            ) {
+                loadMessages(it.messages)
+                Timber.tag(TAG).d("messages: ${Gson().toJson(it.messages)}}")
+
+            }
+
+
         }
-      }
+    }
+
+    private fun loadMessages(messages: List<Message>) {
+        messagesListAdapter.apply {
+            userId = currentUserId
+            submitList(messages)
+        }
+
+
+    }
 
     private fun onTextChangeListener() = with(binding) {
         edtMessage.doAfterTextChanged { btnSend.isEnabled = !it.isNullOrEmpty() }
@@ -92,12 +106,26 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
 
 
     private fun setupRecyclerView() {
-        binding.rvMessages.adapter = messagesListAdapter
+        binding.rvMessages.apply {
+            adapter = messagesListAdapter
+//            scrollToPosition(0)
+        }
         messagesListAdapter.userId = currentUserId
+        messagesListAdapter.registerAdapterDataObserver(object :
+            RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                binding.rvMessages.scrollToPosition(positionStart)
+
+                Timber.tag(TAG).d("Position $positionStart")
+
+            }
+        })
+
     }
 
     private fun sendMessage() = with(binding) {
-        val message = edtMessage.text.toString()
+        val message = edtMessage.text.toString().trim()
 
         if (message.isEmpty()) {
             toast("You can't send empty message")
@@ -109,7 +137,6 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
             receiverId = args.receiverId
         )
 
-        socketIOUtils.sendEvent(SEND_MESSAGE,messageModelRequest)
         chatViewModel.sendMessage(messageModelRequest)
         edtMessage.setText("")
     }
@@ -117,10 +144,12 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
     private fun observeViewModelCallbacks() = with(chatViewModel) {
         getMessages()
         observeLiveDataEvent(messages) {
-            messagesListAdapter.apply {
-                submitList(it.messages)
-                userId = currentUserId
-            }
+            loadMessages(it.messages)
+        }
+
+        observeLiveDataEvent(sentMessage) {
+            socketIOUtils.sendEvent(CHAT_MESSAGES_EVENT, it)
+            Timber.tag(TAG).d("sent message $it")
 
         }
     }
@@ -128,4 +157,5 @@ class ChatDetailsFragment : Fragment(R.layout.fragment_chat_details) {
     private fun getMessages() = with(chatViewModel) {
         chatId?.let { getMessages(it) }
     }
+
 }
