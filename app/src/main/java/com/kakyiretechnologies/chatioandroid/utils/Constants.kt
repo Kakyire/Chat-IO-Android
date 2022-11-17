@@ -9,18 +9,18 @@ package com.kakyiretechnologies.chatioandroid.utils
 
 //const val BASE_URL="http://10.0.2.2:3000/"
 const val BASE_URL="https://chat-io-ap.herokuapp.com/api/"
-private const val API="api/v1/"
+private const val API_V1="v1/"
 
 
 //routes
-const val SIGNUP_ROUTE ="${API}auth/signup"
-const val LOGIN_ROUTE ="${API}auth/login"
-const val USERS_ROUTE ="${API}user/getUsers"
-const val MY_PROFILE_ROUTE ="${API}user/my-profile"
-const val OTHERS_PROFILE_ROUTE ="${API}user/others-profile/{id}"
-const val MESSAGES_ROUTE ="${API}chat/get-messages/{chatId}"
-const val SEND_MESSAGE_ROUTE ="${API}chat/send-message"
-const val CHATS_ROUTE ="${API}chat/chats"
+const val SIGNUP_ROUTE ="${API_V1}auth/signup"
+const val LOGIN_ROUTE ="${API_V1}auth/login"
+const val USERS_ROUTE ="${API_V1}user/getUsers"
+const val MY_PROFILE_ROUTE ="${API_V1}user/my-profile"
+const val OTHERS_PROFILE_ROUTE ="${API_V1}user/others-profile/{id}"
+const val MESSAGES_ROUTE ="${API_V1}chat/get-messages/{chatId}"
+const val SEND_MESSAGE_ROUTE ="${API_V1}chat/send-message"
+const val CHATS_ROUTE ="${API_V1}chat/chats"
 
 
 //socket io events
