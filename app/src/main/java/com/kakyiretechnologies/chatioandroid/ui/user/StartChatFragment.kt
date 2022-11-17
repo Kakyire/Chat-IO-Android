@@ -51,7 +51,12 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
 
     private fun observeViewModelCallbacks() = with(userViewModel) {
         getUsers()
-        observeLiveData(usersList) {
+        observeLiveData(
+            usersList,
+            progressBar = binding.progressBar,
+            swipeRefreshLayout = binding.swipeRefresh,
+            showProgress = true
+        ) {
             usersListAdapter.submitList(it.users)
 
         }
@@ -62,7 +67,7 @@ class StartChatFragment : Fragment(R.layout.fragment_start_chat), OnItemClickLis
 
         Timber.tag(TAG).d("username:${user.username}")
         val newChatPayload = NewChatPayload(user.id)
-        
+
         socketIOUtils.sendEvent(NEW_CHAT_EVENT, newChatPayload)
         navigateToNextPage(
             StartChatFragmentDirections

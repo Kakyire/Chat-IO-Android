@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.kakyiretechnologies.chatioandroid.data.model.response.ApiResponse
 import com.kakyiretechnologies.chatioandroid.data.model.response.UserResponse
 import com.kakyiretechnologies.chatioandroid.preferences.Keys.ACCESS_TOKEN
@@ -60,6 +61,7 @@ fun <T> Fragment.observeLiveData(
     liveData: LiveData<DataState<ApiResponse<T>>>,
     showProgress: Boolean = true,
     progressBar: ProgressBar? = null,
+    swipeRefreshLayout: SwipeRefreshLayout? = null,
     onSuccess: (T) -> Unit
 ) {
     liveData.observe(viewLifecycleOwner) { response ->
@@ -68,7 +70,7 @@ fun <T> Fragment.observeLiveData(
                 progressBar?.isVisible = false
                 toast(response.message)
 
-                  Timber.tag(TAG).d(response.message)
+                Timber.tag(TAG).d(response.message)
 
             }
             is DataState.Success -> {
@@ -78,6 +80,8 @@ fun <T> Fragment.observeLiveData(
 
             is DataState.Loading -> {
                 progressBar?.isVisible = showProgress
+                swipeRefreshLayout?.isRefreshing=false
+
             }
 
         }
@@ -91,7 +95,7 @@ fun <T> Fragment.observeLiveDataEvent(
     progressBar: ProgressBar? = null,
     onSuccess: (T) -> Unit
 ) {
-    liveData.observe(viewLifecycleOwner,EventObserver{ response ->
+    liveData.observe(viewLifecycleOwner, EventObserver { response ->
         when (response) {
             is DataState.Error -> {
                 progressBar?.isVisible = false
@@ -114,11 +118,11 @@ fun <T> Fragment.observeLiveDataEvent(
     })
 }
 
-fun saveUserPrefs(preferenceManager: PreferenceManager, user: UserResponse){
+fun saveUserPrefs(preferenceManager: PreferenceManager, user: UserResponse) {
     preferenceManager.apply {
         save(IS_USER_LOGGED_IN, true)
         save(ACCESS_TOKEN, user.token)
-        save(USER_ID,user.id)
+        save(USER_ID, user.id)
     }
 }
 
