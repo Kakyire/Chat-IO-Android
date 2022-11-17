@@ -12,5 +12,5 @@ data class UserResponse(
     val username: String,
     val createdAt: String,
     val updatedAt: String,
-    val token: String?=null
+    val token: String
 )

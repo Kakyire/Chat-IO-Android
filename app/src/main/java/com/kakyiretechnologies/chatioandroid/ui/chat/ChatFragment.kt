@@ -116,8 +116,13 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
         super.onResume()
         val onlineUserPayload = OnlineUserPayload(currentUserId!!)
         socketIOUtils.apply {
-            connect()
-//            joinOnlineUsers(onlineUserPayload)
+
+
+
+            if (!isConnected()) {
+                connect()
+                joinOnlineUsers(onlineUserPayload)
+            }
         }
     }
 
@@ -129,7 +134,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), OnItemClickListener {
 
 
             val joinChatPayload = JoinChatPayload(chat.id)
-            socketIOUtils.sendEvent(JOIN_CHAT_EVENT, joinChatPayload)
+//            socketIOUtils.sendEvent(JOIN_CHAT_EVENT, joinChatPayload)
 
             navigateToNextPage(
                 ChatFragmentDirections.actionChatFragmentToChatDetailsFragment(

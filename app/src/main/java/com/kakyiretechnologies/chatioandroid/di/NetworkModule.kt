@@ -9,6 +9,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.socket.client.IO
+import io.socket.client.Socket
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -51,7 +53,12 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSocketIO(): SocketIOUtils {
-        return SocketIOUtils(url = BASE_URL)
+    fun provideSocketIO(io: Socket): SocketIOUtils {
+        return SocketIOUtils(io=io)
+    }
+
+    @Provides
+    fun provideIo(): Socket {
+        return IO.socket(BASE_URL)
     }
 }

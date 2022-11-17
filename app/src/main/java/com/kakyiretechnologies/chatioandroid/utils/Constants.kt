@@ -8,8 +8,8 @@ package com.kakyiretechnologies.chatioandroid.utils
  */
 
 //const val BASE_URL="http://10.0.2.2:3000/"
-const val BASE_URL="https://chat-io-ap.herokuapp.com/api/"
-private const val API_V1="v1/"
+const val BASE_URL="https://chat-io-ap.herokuapp.com/"
+private const val API_V1="api/v1/"
 
 
 //routes

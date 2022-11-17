@@ -17,14 +17,12 @@ import timber.log.Timber
  * https://github.com/kakyire
  */
 @Suppress("UNCHECKED_CAST")
-class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
-
-    private val io: Socket = IO.socket(url)
+class SocketIOUtils(private val io: Socket, private val gson: Gson = Gson()) {
 
 
     fun connect(): Socket? {
 
-          Timber.tag("TAG").d("Just connected to server")
+        Timber.tag(TAG).d("Just connected to server")
 
         return io.connect()
     }
@@ -44,18 +42,25 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
     }
 
 
-    fun onConnect() {
-        io.apply {
-            on("connect") {
-                Timber.d("Connected to server with id: ${id()}")
-            }
-        }
-    }
-    fun joinOnlineUsers(onlineUserPayload: OnlineUserPayload){
-       io.on("connect"){ sendEvent(ONLINE_USER_EVENT,onlineUserPayload)}
+    fun isConnected(): Boolean {
+        return io.isActive
+
     }
 
-    fun <T : Any>onEventReceive(event: String, fragment: Fragment,clazz: Class<T>, onReceived: (T) -> Unit) {
+    fun joinOnlineUsers(onlineUserPayload: OnlineUserPayload) {
+        io.on("connect") {
+
+            Timber.tag("TAG").d("user connected with ${io.id()}")
+            sendEvent(ONLINE_USER_EVENT, onlineUserPayload)
+        }
+    }
+
+    fun <T : Any> onEventReceive(
+        event: String,
+        fragment: Fragment,
+        clazz: Class<T>,
+        onReceived: (T) -> Unit
+    ) {
         io.on(event) {
             if (event.equals(
                     "connect",
@@ -66,7 +71,7 @@ class SocketIOUtils(url: String, private val gson: Gson = Gson()) {
             }
             if (it.isNotEmpty()) {
                 val value = gson.fromJson(it[0].toString(), clazz)
-             fragment.  lifecycleScope.launch {  onReceived(value) }
+                fragment.lifecycleScope.launch { onReceived(value) }
             }
         }
     }

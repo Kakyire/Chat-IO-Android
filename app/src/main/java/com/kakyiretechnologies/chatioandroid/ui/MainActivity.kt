@@ -93,14 +93,20 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (isUserLoggedIn) {
+
+            Timber.tag(TAG).d("user has logged in")
+
             val userId = preferenceManager.getString(USER_ID)
             val onlineUserPayload = OnlineUserPayload(userId!!)
             socketIOUtils.apply {
-                connect()
-                joinOnlineUsers(onlineUserPayload)
+
+                if (!isConnected()) {
+                    connect()
+                    joinOnlineUsers(onlineUserPayload)
+                }
+
             }
         }
-
 
 
     }
