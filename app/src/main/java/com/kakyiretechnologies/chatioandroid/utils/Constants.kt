@@ -8,7 +8,7 @@ package com.kakyiretechnologies.chatioandroid.utils
  */
 
 //const val BASE_URL="http://10.0.2.2:3000/"
-const val BASE_URL="https://chat-io-kakyire.vercel.app/"
+const val BASE_URL="https://chat-io-ap.herokuapp.com/api/"
 private const val API="api/v1/"
 
 
